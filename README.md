@@ -4,7 +4,7 @@
 
 BatchDock is a lightweight local batch-processing portal inspired by research-computing workflows. It uses Flask, Celery, Redis, and SQLite to queue small background jobs, process them outside the web request, display progress, inspect structured output, review failures, and show basic worker availability from a browser dashboard.
 
-<img width="2048" height="1280" alt="image" src="https://github.com/user-attachments/assets/48a3a4b6-0232-4080-a88c-7034d81165b7" />
+<img width="1284" height="731" alt="image" src="https://github.com/user-attachments/assets/5eb5cd50-3ca1-4928-ac65-920392673408" />
 
 ## Features
 
