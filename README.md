@@ -24,7 +24,7 @@ BatchDock is a lightweight local batch-processing portal inspired by research-co
 
 ## Tech stack
 
-| Technology | Role |
+| Technology | Used For |
 | --- | --- |
 | Python | Application and task logic |
 | Flask | Web routes, templates, and JSON API |
