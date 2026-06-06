@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}BatchDock{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="shell topbar-inner">
+        <a class="brand" href="{{ url_for('dashboard.dashboard') }}">
+          <span class="brand-mark">BD</span>
+          <span>
+            <strong>BatchDock</strong>
+            <small>Local batch-processing dashboard</small>
+          </span>
+        </a>
+        <nav class="topnav" aria-label="Primary navigation">
+          <a href="{{ url_for('dashboard.dashboard') }}">Overview</a>
+          <a href="{{ url_for('dashboard.dashboard') }}#submit-job">Submit Job</a>
+          <a href="{{ url_for('dashboard.dashboard') }}#job-history">Job History</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="shell page-content">
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+      <div class="shell">
+        BatchDock is a local learning project inspired by research-computing workflows. It is not an HPC scheduler.
+      </div>
+    </footer>
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

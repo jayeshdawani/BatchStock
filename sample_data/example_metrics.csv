@@ -1,0 +1,6 @@
+day,requests,latency_ms,error_rate,region
+Monday,142,48.2,0.012,east
+Tuesday,176,51.7,0.009,east
+Wednesday,165,46.9,0.015,west
+Thursday,194,55.1,0.011,west
+Friday,221,59.4,0.018,east

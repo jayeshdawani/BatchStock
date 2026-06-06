@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% block title %}BatchDock · Overview{% endblock %}
+
+{% block content %}
+<section class="page-heading">
+  <div>
+    <p class="eyebrow">Local queue workspace</p>
+    <h1>Submit work. Track progress. Inspect results.</h1>
+    <p class="lede">Queue small background jobs through Redis, process them with a Celery worker, and review each job from one local dashboard.</p>
+  </div>
+  <button class="button secondary" type="button" id="refresh-dashboard">Refresh queue</button>
+</section>
+
+<section class="summary-grid" aria-label="Job summary">
+  <article class="summary-card"><span>Waiting</span><strong id="count-waiting">0</strong><small>Queued for execution</small></article>
+  <article class="summary-card"><span>In progress</span><strong id="count-in-progress">0</strong><small>Currently running</small></article>
+  <article class="summary-card"><span>Finished</span><strong id="count-finished">0</strong><small>Completed successfully</small></article>
+  <article class="summary-card"><span>Failed</span><strong id="count-failed">0</strong><small>Needs inspection</small></article>
+  <article class="summary-card"><span>Cancelled</span><strong id="count-cancelled">0</strong><small>Stopped while waiting</small></article>
+</section>
+
+<section class="dashboard-grid">
+  <article class="panel submit-panel" id="submit-job">
+    <div class="panel-heading">
+      <div>
+        <p class="eyebrow">New workload</p>
+        <h2>Queue a job</h2>
+      </div>
+    </div>
+    <form id="job-form" enctype="multipart/form-data">
+      <label>
+        Job type
+        <select name="task_type" id="task-type">
+          <option value="demo">Timed demo workload</option>
+          <option value="csv_summary">CSV summary analysis</option>
+        </select>
+      </label>
+
+      <label>
+        Description <span class="optional">optional</span>
+        <input name="description" maxlength="120" placeholder="Example: nightly metrics demo">
+      </label>
+
+      <div id="demo-fields" class="field-group">
+        <div class="two-columns">
+          <label>
+            Steps
+            <input type="number" name="steps" value="8" min="3" max="20">
+          </label>
+          <label>
+            Seconds per step
+            <input type="number" name="step_seconds" value="1" min="0.25" max="3" step="0.25">
+          </label>
+        </div>
+        <label>
+          Fail at step <span class="optional">optional test control</span>
+          <input type="number" name="fail_at_step" value="0" min="0" max="20">
+          <small>Use 0 for a successful run. Choose another step to verify failure handling.</small>
+        </label>
+      </div>
+
+      <div id="csv-fields" class="field-group hidden">
+        <label>
+          CSV file
+          <input type="file" name="csv_file" accept=".csv,text/csv">
+          <small>Maximum upload size: 2 MB. A sample file is included in <code>sample_data/</code>.</small>
+        </label>
+      </div>
+
+      <label>
+        Start delay in seconds <span class="optional">optional</span>
+        <input type="number" name="start_delay_seconds" value="0" min="0" max="60">
+        <small>Use a short delay to observe or cancel a waiting job.</small>
+      </label>
+
+      <div class="form-footer">
+        <button class="button primary" type="submit">Queue job</button>
+        <span id="form-status" class="form-status" role="status"></span>
+      </div>
+    </form>
+  </article>
+
+  <aside class="panel worker-panel">
+    <div class="panel-heading">
+      <div>
+        <p class="eyebrow">Background execution</p>
+        <h2>Worker status</h2>
+      </div>
+      <button class="text-button" type="button" id="refresh-worker">Check now</button>
+    </div>
+    <div id="worker-card" class="worker-card pending">
+      <span class="status-dot"></span>
+      <div>
+        <strong>Checking workers…</strong>
+        <p>Waiting for a Celery ping reply.</p>
+      </div>
+    </div>
+    <p class="worker-note">A missed reply means no worker answered before the short timeout. It is a useful local signal, not absolute proof that a process is down.</p>
+  </aside>
+</section>
+
+<section class="panel queue-panel" id="job-history">
+  <div class="panel-heading history-heading">
+    <div>
+      <p class="eyebrow">Queue and recent records</p>
+      <h2>Job history</h2>
+    </div>
+    <div class="history-controls">
+      <input id="search-jobs" type="search" placeholder="Search ID or description" aria-label="Search jobs">
+      <select id="filter-status" aria-label="Filter jobs by status">
+        <option value="">All statuses</option>
+        <option value="waiting">Waiting</option>
+        <option value="in_progress">In progress</option>
+        <option value="finished">Finished</option>
+        <option value="failed">Failed</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Job</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Progress</th>
+          <th>Submitted</th>
+          <th class="actions-column">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="jobs-body">
+        <tr><td colspan="6" class="empty-state">Loading jobs…</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="system-note">
+  <strong>System note</strong>
+  <p>This dashboard models local background processing. Redis holds Celery messages and result state; SQLite keeps a small searchable job history for the interface.</p>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}" defer></script>
+{% endblock %}

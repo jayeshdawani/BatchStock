@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}BatchDock · Job details{% endblock %}
+
+{% block content %}
+{% if missing_job_id %}
+<section class="panel missing-panel">
+  <p class="eyebrow">Job details</p>
+  <h1>Job record not found</h1>
+  <p>The local record <code>{{ missing_job_id }}</code> may have been removed.</p>
+  <a class="button secondary" href="{{ url_for('dashboard.dashboard') }}">Return to dashboard</a>
+</section>
+{% else %}
+<section class="detail-heading">
+  <div>
+    <a class="back-link" href="{{ url_for('dashboard.dashboard') }}">← Back to dashboard</a>
+    <p class="eyebrow">Job details</p>
+    <h1 id="detail-description">{{ job.description }}</h1>
+    <p class="mono subdued">Local job ID: <span id="detail-id">{{ job.id }}</span></p>
+  </div>
+  <span id="detail-status" class="badge badge-{{ job.status }}">{{ job.status_label }}</span>
+</section>
+
+<div id="job-details-page" data-job-id="{{ job.id }}">
+  <section class="detail-grid">
+    <article class="panel detail-progress-panel">
+      <div class="panel-heading"><h2>Current progress</h2></div>
+      <div class="large-progress"><span id="detail-progress-bar" style="width: {{ job.progress }}%"></span></div>
+      <div class="progress-copy"><strong id="detail-progress">{{ job.progress }}%</strong><span id="detail-stage">{{ job.stage }}</span></div>
+      <div id="detail-actions" class="detail-actions"></div>
+    </article>
+
+    <article class="panel metadata-panel">
+      <div class="panel-heading"><h2>Metadata</h2></div>
+      <dl class="metadata-list">
+        <div><dt>Task type</dt><dd id="detail-type">{{ job.task_type_label }}</dd></div>
+        <div><dt>Celery task ID</dt><dd id="detail-celery-id" class="mono">{{ job.celery_task_id or 'Pending assignment' }}</dd></div>
+        <div><dt>Submitted</dt><dd id="detail-created">{{ job.created_at }}</dd></div>
+        <div><dt>Started</dt><dd id="detail-started">{{ job.started_at or 'Not started' }}</dd></div>
+        <div><dt>Completed</dt><dd id="detail-completed">{{ job.completed_at or 'Not completed' }}</dd></div>
+      </dl>
+    </article>
+  </section>
+
+  <section class="detail-grid lower-details">
+    <article class="panel">
+      <div class="panel-heading"><h2>Output</h2></div>
+      <pre id="detail-output" class="output-block">{{ job.output | tojson(indent=2) if job.output else 'No output available yet.' }}</pre>
+    </article>
+    <article class="panel">
+      <div class="panel-heading"><h2>Failure details</h2></div>
+      <pre id="detail-error" class="output-block error-block">{{ job.error_message or 'No failure recorded.' }}</pre>
+    </article>
+  </section>
+
+  <section class="panel event-panel">
+    <div class="panel-heading"><h2>Event log</h2></div>
+    <ol id="event-log" class="event-log"></ol>
+  </section>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{% if not missing_job_id %}<script src="{{ url_for('static', filename='js/dashboard.js') }}" defer></script>{% endif %}
+{% endblock %}

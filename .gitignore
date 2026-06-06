@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+
+# Local configuration
+.env
+
+# Local runtime state
+instance/*.sqlite3
+instance/*.sqlite3-*
+instance/uploads/*
+!instance/uploads/.gitkeep
+
+# macOS and editor files
+.DS_Store
+.vscode/
+.idea/
