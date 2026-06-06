@@ -77,20 +77,4 @@ Run automated tests:
 ./scripts/run_tests.sh
 ```
 
-Then follow `MANUAL_TESTING.md` for the browser walkthrough.
 
-## Local configuration
-
-The default `.env` file works for a normal local run. Change values only when needed:
-
-```text
-SECRET_KEY=replace-this-with-a-random-local-development-value
-REDIS_URL=redis://localhost:6379/0
-DATABASE_PATH=instance/batchdock.sqlite3
-UPLOAD_FOLDER=instance/uploads
-WORKER_PING_TIMEOUT=0.5
-JOB_HISTORY_LIMIT=100
-FLASK_DEBUG=1
-```
-
-Replace the example `SECRET_KEY` before sharing or deploying the app anywhere. Do not commit `.env`.
