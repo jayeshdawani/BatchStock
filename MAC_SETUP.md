@@ -1,6 +1,4 @@
-# BatchDock macOS Quick Start
-
-This file contains the shortest path from the downloaded archive to a running local dashboard.
+# BatchDock macOS
 
 ## Requirements
 
@@ -8,12 +6,6 @@ Install:
 
 - Python 3.11 or newer
 - Either Docker Desktop **or** a local Redis installation
-
-Check Python:
-
-```bash
-python3 --version
-```
 
 ## 1. Unpack the archive
 
@@ -32,39 +24,11 @@ python -m pip install -r requirements-dev.txt
 cp .env.example .env
 ```
 
-No code edits are required for the standard local setup. The default `.env` values expect Redis on `localhost:6379`.
-
 ## 3. Start Redis
-
-Choose one option.
-
-### Option A: Docker Desktop
 
 ```bash
 ./scripts/start_redis_docker.sh
 docker exec -it batchdock-redis redis-cli ping
-```
-
-Expected reply:
-
-```text
-PONG
-```
-
-### Option B: Local Redis with Homebrew
-
-The current official Redis macOS instructions use:
-
-```bash
-brew tap redis/redis
-brew install --cask redis
-redis-server $(brew --prefix)/etc/redis.conf
-```
-
-In another terminal:
-
-```bash
-redis-cli ping
 ```
 
 Expected reply:
