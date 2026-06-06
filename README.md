@@ -4,17 +4,7 @@
 
 BatchDock is a lightweight local batch-processing portal inspired by research-computing workflows. It uses Flask, Celery, Redis, and SQLite to queue small background jobs, process them outside the web request, display progress, inspect structured output, review failures, and show basic worker availability from a browser dashboard.
 
-BatchDock is intentionally a student-scale local project. It is not an HPC scheduler, a Slurm interface, a Kubernetes platform, or a replacement for an institutional computing environment.
-
-## Screenshots
-
-Add screenshots after running the app locally:
-
-```text
- docs/screenshots/dashboard.png
- docs/screenshots/job-details.png
- docs/screenshots/failed-job.png
-```
+<img width="2048" height="1280" alt="image" src="https://github.com/user-attachments/assets/48a3a4b6-0232-4080-a88c-7034d81165b7" />
 
 ## Features
 
@@ -32,7 +22,7 @@ Add screenshots after running the app locally:
 - Store dashboard metadata in a small local SQLite database.
 - Run automated tests without a live Redis server by using Celery's eager test mode.
 
-## Technology stack
+## Tech stack
 
 | Technology | Role |
 | --- | --- |
@@ -44,7 +34,7 @@ Add screenshots after running the app locally:
 | HTML, CSS, vanilla JavaScript | Dashboard interface and polling |
 | pytest | Automated checks |
 
-## How the application works
+## How this application works
 
 1. The user submits a timed demo or CSV-summary job from the dashboard.
 2. Flask validates the input and stores a local metadata record in SQLite.
@@ -115,115 +105,7 @@ batch_dock/
 
 [`MAC_SETUP.md`](MAC_SETUP.md)
 
-['WINDOWS_SETUP.md'](WINDOWS_SETUP.md)
-
-
-### 1. Requirements
-
-Install:
-
-- Python 3.11 or newer
-- Redis running locally **or** Docker Desktop
-
-Confirm Python:
-
-```bash
-python3 --version
-```
-
-### 2. Unpack and enter the repository
-
-```bash
-unzip batch_dock.zip
-cd batch_dock
-```
-
-### 3. Create a virtual environment
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -r requirements-dev.txt
-```
-
-### 4. Create local configuration
-
-```bash
-cp .env.example .env
-```
-
-For local development, the defaults work with Redis at `localhost:6379`. Replace the example `SECRET_KEY` value before sharing or deploying the repository anywhere.
-
-### 5. Start Redis
-
-Choose one method.
-
-#### Option A: Docker Desktop
-
-```bash
-./scripts/start_redis_docker.sh
-```
-
-Verify:
-
-```bash
-docker exec -it batchdock-redis redis-cli ping
-```
-
-Expected reply:
-
-```text
-PONG
-```
-
-#### Option B: Local Redis installation
-
-The current Redis macOS documentation uses Homebrew:
-
-```bash
-brew tap redis/redis
-brew install --cask redis
-redis-server $(brew --prefix)/etc/redis.conf
-```
-
-In another terminal, verify:
-
-```bash
-redis-cli ping
-```
-
-Expected reply:
-
-```text
-PONG
-```
-
-The official macOS installation page is: <https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/homebrew/>
-
-### 6. Start the Celery worker
-
-Open a second terminal in the repository, activate the same virtual environment, and run:
-
-```bash
-source .venv/bin/activate
-celery -A make_celery.celery_app worker --loglevel=INFO --pool=solo
-```
-
-### 7. Start the Flask dashboard
-
-Open another terminal in the repository, activate the same virtual environment, and run:
-
-```bash
-source .venv/bin/activate
-python app.py
-```
-
-Open:
-
-```text
-http://127.0.0.1:5000
-```
+[`WINDOWS_SETUP.md`](WINDOWS_SETUP.md)
 
 ## Usage examples
 
@@ -253,20 +135,7 @@ http://127.0.0.1:5000
 - Upload `sample_data/example_metrics.csv`.
 - Inspect row count, headers, non-empty counts, and numeric-column statistics in the output.
 
-## Testing
-
-Run the automated suite:
-
-```bash
-source .venv/bin/activate
-./scripts/run_tests.sh
-```
-
-The tests use an in-memory Celery broker and eager execution mode, so they do not require Redis.
-
-For a full local verification sequence, see [`MANUAL_TESTING.md`](MANUAL_TESTING.md).
-
-## Known limitations
+## Limitations
 
 - BatchDock is a single-machine local demonstration.
 - It does not implement authentication or user accounts.
@@ -276,13 +145,3 @@ For a full local verification sequence, see [`MANUAL_TESTING.md`](MANUAL_TESTING
 - Removing a record deletes local history but does not clean up uploaded files automatically.
 - CSV reports are intentionally small and basic.
 
-## Future improvements
-
-- Add downloadable JSON or CSV report files for completed jobs.
-- Add normal- and high-priority queues with separate worker startup examples.
-- Add retention cleanup for old uploads and metadata records.
-- Add a lightweight integration test that starts Redis in Docker.
-
-## Attribution
-
-This project is an independently expanded revision of Miguel Grinberg's MIT-licensed **Using Celery with Flask** tutorial example. The original license notice is preserved in `LICENSE`. See [`ATTRIBUTION.md`](ATTRIBUTION.md) for details.
